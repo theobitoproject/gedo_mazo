@@ -1,0 +1,10 @@
+mode: atomic
+github.com/theobitoproject/gedo_mazo/internal/domain/merging_data.go:8.45,10.2 1 1
+github.com/theobitoproject/gedo_mazo/internal/domain/document.go:13.48,14.14 1 2
+github.com/theobitoproject/gedo_mazo/internal/domain/document.go:18.2,18.27 1 1
+github.com/theobitoproject/gedo_mazo/internal/domain/document.go:14.14,16.3 1 1
+github.com/theobitoproject/gedo_mazo/internal/domain/document.go:22.32,24.2 1 1
+github.com/theobitoproject/gedo_mazo/internal/domain/folder.go:13.44,14.14 1 2
+github.com/theobitoproject/gedo_mazo/internal/domain/folder.go:18.2,18.25 1 1
+github.com/theobitoproject/gedo_mazo/internal/domain/folder.go:14.14,16.3 1 1
+github.com/theobitoproject/gedo_mazo/internal/domain/folder.go:22.30,24.2 1 1
