@@ -1,6 +1,7 @@
 package application_test
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/golang/mock/gomock"
@@ -17,6 +18,8 @@ var _ = Describe("Application", func() {
 		app *application.Application
 		err error
 
+		ctx context.Context
+
 		mockCtrl        *gomock.Controller
 		mockFileStorage *mocks.MockFileStorage
 
@@ -28,6 +31,8 @@ var _ = Describe("Application", func() {
 	)
 
 	BeforeEach(func() {
+		ctx = context.Background()
+
 		mockCtrl = gomock.NewController(GinkgoT())
 		mockFileStorage = mocks.NewMockFileStorage(mockCtrl)
 
@@ -71,7 +76,12 @@ var _ = Describe("Application", func() {
 
 	Describe("Generate document from template", func() {
 		JustBeforeEach(func() {
-			err = app.GenerateDocumentFromTemplate(templateDoc, outputFolder, data)
+			err = app.GenerateDocumentFromTemplate(
+				ctx,
+				templateDoc,
+				outputFolder,
+				data,
+			)
 		})
 
 		BeforeEach(func() {
@@ -83,7 +93,7 @@ var _ = Describe("Application", func() {
 			BeforeEach(func() {
 				mockFileStorage.
 					EXPECT().
-					CloneDocument(templateDoc, outputFolder).
+					CloneDocument(ctx, templateDoc, outputFolder).
 					Return(nil, fmt.Errorf("error cloning document")).
 					Times(1)
 			})
@@ -100,7 +110,7 @@ var _ = Describe("Application", func() {
 
 				mockFileStorage.
 					EXPECT().
-					CloneDocument(templateDoc, outputFolder).
+					CloneDocument(ctx, templateDoc, outputFolder).
 					Return(clonedDocument, nil).
 					Times(1)
 			})
@@ -109,7 +119,7 @@ var _ = Describe("Application", func() {
 				BeforeEach(func() {
 					mockFileStorage.
 						EXPECT().
-						MergeDataIntoDocument(clonedDocument, data).
+						MergeDataIntoDocument(ctx, clonedDocument, data).
 						Return(fmt.Errorf("error merging data")).
 						Times(1)
 				})
@@ -123,7 +133,7 @@ var _ = Describe("Application", func() {
 				BeforeEach(func() {
 					mockFileStorage.
 						EXPECT().
-						MergeDataIntoDocument(clonedDocument, data).
+						MergeDataIntoDocument(ctx, clonedDocument, data).
 						Return(nil).
 						Times(1)
 				})

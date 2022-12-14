@@ -1,6 +1,7 @@
 package application
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/theobitoproject/gedo_mazo/internal/domain"
@@ -31,14 +32,19 @@ func NewApplication(
 // inside the specified output folder
 // and the it merges data into the new document
 func (app *Application) GenerateDocumentFromTemplate(
+	ctx context.Context,
 	templateDoc *domain.Document,
 	outputFolder *domain.Folder,
 	data *domain.MergingData,
 ) error {
-	clonedDocument, err := app.fileStorage.CloneDocument(templateDoc, outputFolder)
+	clonedDocument, err := app.fileStorage.CloneDocument(
+		ctx,
+		templateDoc,
+		outputFolder,
+	)
 	if err != nil {
 		return err
 	}
 
-	return app.fileStorage.MergeDataIntoDocument(clonedDocument, data)
+	return app.fileStorage.MergeDataIntoDocument(ctx, clonedDocument, data)
 }

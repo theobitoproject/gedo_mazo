@@ -5,6 +5,7 @@
 package mocks
 
 import (
+	context "context"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
@@ -35,30 +36,30 @@ func (m *MockFileStorage) EXPECT() *MockFileStorageMockRecorder {
 }
 
 // CloneDocument mocks base method.
-func (m *MockFileStorage) CloneDocument(arg0 *domain.Document, arg1 *domain.Folder) (*domain.Document, error) {
+func (m *MockFileStorage) CloneDocument(arg0 context.Context, arg1 *domain.Document, arg2 *domain.Folder) (*domain.Document, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CloneDocument", arg0, arg1)
+	ret := m.ctrl.Call(m, "CloneDocument", arg0, arg1, arg2)
 	ret0, _ := ret[0].(*domain.Document)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CloneDocument indicates an expected call of CloneDocument.
-func (mr *MockFileStorageMockRecorder) CloneDocument(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockFileStorageMockRecorder) CloneDocument(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CloneDocument", reflect.TypeOf((*MockFileStorage)(nil).CloneDocument), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CloneDocument", reflect.TypeOf((*MockFileStorage)(nil).CloneDocument), arg0, arg1, arg2)
 }
 
 // MergeDataIntoDocument mocks base method.
-func (m *MockFileStorage) MergeDataIntoDocument(arg0 *domain.Document, arg1 *domain.MergingData) error {
+func (m *MockFileStorage) MergeDataIntoDocument(arg0 context.Context, arg1 *domain.Document, arg2 *domain.MergingData) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "MergeDataIntoDocument", arg0, arg1)
+	ret := m.ctrl.Call(m, "MergeDataIntoDocument", arg0, arg1, arg2)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // MergeDataIntoDocument indicates an expected call of MergeDataIntoDocument.
-func (mr *MockFileStorageMockRecorder) MergeDataIntoDocument(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockFileStorageMockRecorder) MergeDataIntoDocument(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MergeDataIntoDocument", reflect.TypeOf((*MockFileStorage)(nil).MergeDataIntoDocument), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MergeDataIntoDocument", reflect.TypeOf((*MockFileStorage)(nil).MergeDataIntoDocument), arg0, arg1, arg2)
 }
