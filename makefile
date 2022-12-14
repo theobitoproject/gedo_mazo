@@ -4,4 +4,8 @@ test_all:
 
 .PHONY: test_all_vv
 test_all_vv:
-	ginkgo -r --race -cover --randomize-all --randomize-suites --trace --vv -skip-package=vendor
+	ginkgo -r --race -cover --randomize-all --randomize-suites --trace -skip-package=vendor --vv
+
+.PHONY: gen_mocks
+gen_mocks:
+	sh scripts/gen_mocks.sh

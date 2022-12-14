@@ -3,6 +3,7 @@ module github.com/theobitoproject/gedo_mazo
 go 1.19
 
 require (
+	github.com/golang/mock v1.6.0
 	github.com/onsi/ginkgo/v2 v2.6.0
 	github.com/onsi/gomega v1.24.1
 )
