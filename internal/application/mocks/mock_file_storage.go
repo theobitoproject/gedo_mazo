@@ -36,18 +36,18 @@ func (m *MockFileStorage) EXPECT() *MockFileStorageMockRecorder {
 }
 
 // CloneDocument mocks base method.
-func (m *MockFileStorage) CloneDocument(arg0 context.Context, arg1 *domain.Document, arg2 *domain.Folder) (*domain.Document, error) {
+func (m *MockFileStorage) CloneDocument(arg0 context.Context, arg1 *domain.Document, arg2 *domain.Folder, arg3 *domain.Document) (*domain.Document, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CloneDocument", arg0, arg1, arg2)
+	ret := m.ctrl.Call(m, "CloneDocument", arg0, arg1, arg2, arg3)
 	ret0, _ := ret[0].(*domain.Document)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CloneDocument indicates an expected call of CloneDocument.
-func (mr *MockFileStorageMockRecorder) CloneDocument(arg0, arg1, arg2 interface{}) *gomock.Call {
+func (mr *MockFileStorageMockRecorder) CloneDocument(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CloneDocument", reflect.TypeOf((*MockFileStorage)(nil).CloneDocument), arg0, arg1, arg2)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CloneDocument", reflect.TypeOf((*MockFileStorage)(nil).CloneDocument), arg0, arg1, arg2, arg3)
 }
 
 // MergeDataIntoDocument mocks base method.

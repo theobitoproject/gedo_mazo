@@ -25,6 +25,7 @@ var _ = Describe("Application", func() {
 
 		templateDoc  *domain.Document
 		outputFolder *domain.Folder
+		docToCreate  *domain.Document
 		data         *domain.MergingData
 
 		clonedDocument *domain.Document
@@ -36,10 +37,13 @@ var _ = Describe("Application", func() {
 		mockCtrl = gomock.NewController(GinkgoT())
 		mockFileStorage = mocks.NewMockFileStorage(mockCtrl)
 
-		templateDoc, err = domain.NewDocument("some doc id")
+		templateDoc, err = domain.NewDocument("some doc id", "some template name")
 		Expect(err).To(BeNil())
 
 		outputFolder, err = domain.NewFolder("some folder id")
+		Expect(err).To(BeNil())
+
+		docToCreate, err = domain.NewUnsavedDocument("doc to create")
 		Expect(err).To(BeNil())
 
 		data, err = domain.NewMergingData()
@@ -80,6 +84,7 @@ var _ = Describe("Application", func() {
 				ctx,
 				templateDoc,
 				outputFolder,
+				docToCreate,
 				data,
 			)
 		})
@@ -89,13 +94,13 @@ var _ = Describe("Application", func() {
 			Expect(err).To(BeNil())
 		})
 
-		Context("when cloning document fails", func() {
+		Context("when doc to create is already saved", func() {
 			BeforeEach(func() {
-				mockFileStorage.
-					EXPECT().
-					CloneDocument(ctx, templateDoc, outputFolder).
-					Return(nil, fmt.Errorf("error cloning document")).
-					Times(1)
+				docToCreate, err = domain.NewDocument(
+					"id already in place",
+					"doc to create",
+				)
+				Expect(err).To(BeNil())
 			})
 
 			It("should return an error", func() {
@@ -103,24 +108,18 @@ var _ = Describe("Application", func() {
 			})
 		})
 
-		Context("when cloning document succeeds", func() {
-			BeforeEach(func() {
-				clonedDocument, err = domain.NewDocument("some cloned doc id")
-				Expect(err).To(BeNil())
-
-				mockFileStorage.
-					EXPECT().
-					CloneDocument(ctx, templateDoc, outputFolder).
-					Return(clonedDocument, nil).
-					Times(1)
-			})
-
-			Context("when merging data into document fails", func() {
+		Context("when doc to create is NOT saved yet", func() {
+			Context("when cloning document fails", func() {
 				BeforeEach(func() {
 					mockFileStorage.
 						EXPECT().
-						MergeDataIntoDocument(ctx, clonedDocument, data).
-						Return(fmt.Errorf("error merging data")).
+						CloneDocument(
+							ctx,
+							templateDoc,
+							outputFolder,
+							docToCreate,
+						).
+						Return(nil, fmt.Errorf("error cloning document")).
 						Times(1)
 				})
 
@@ -129,17 +128,52 @@ var _ = Describe("Application", func() {
 				})
 			})
 
-			Context("when merging data into document succeeds", func() {
+			Context("when cloning document succeeds", func() {
 				BeforeEach(func() {
+					clonedDocument, err = domain.NewDocument(
+						"some cloned doc id",
+						"some cloned doc name",
+					)
+					Expect(err).To(BeNil())
+
 					mockFileStorage.
 						EXPECT().
-						MergeDataIntoDocument(ctx, clonedDocument, data).
-						Return(nil).
+						CloneDocument(
+							ctx,
+							templateDoc,
+							outputFolder,
+							docToCreate,
+						).
+						Return(clonedDocument, nil).
 						Times(1)
 				})
 
-				It("should NOT return an error", func() {
-					Expect(err).To(BeNil())
+				Context("when merging data into document fails", func() {
+					BeforeEach(func() {
+						mockFileStorage.
+							EXPECT().
+							MergeDataIntoDocument(ctx, clonedDocument, data).
+							Return(fmt.Errorf("error merging data")).
+							Times(1)
+					})
+
+					It("should return an error", func() {
+						Expect(err).ToNot(BeNil())
+					})
+				})
+
+				Context("when merging data into document succeeds", func() {
+					BeforeEach(func() {
+						mockFileStorage.
+							EXPECT().
+							MergeDataIntoDocument(ctx, clonedDocument, data).
+							Return(nil).
+							Times(1)
+					})
+
+					It("should NOT return an error", func() {
+						Expect(err).To(BeNil())
+					})
 				})
 			})
 		})

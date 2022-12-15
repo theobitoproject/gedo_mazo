@@ -12,16 +12,18 @@ var _ = Describe("Document", func() {
 		document *domain.Document
 		err      error
 
-		id string
+		id   string
+		name string
 	)
 
 	BeforeEach(func() {
 		id = "some id"
+		name = "some name"
 	})
 
 	Describe("Creating a document", func() {
 		JustBeforeEach(func() {
-			document, err = domain.NewDocument(id)
+			document, err = domain.NewDocument(id, name)
 		})
 
 		Context("when id is empty", func() {
@@ -29,9 +31,38 @@ var _ = Describe("Document", func() {
 				id = ""
 			})
 
-			It("should throw an error", func() {
-				Expect(document).To(BeNil())
-				Expect(err).ToNot(BeNil())
+			It("should return a proper document", func() {
+				Expect(document).ToNot(BeNil())
+				Expect(err).To(BeNil())
+			})
+
+			It("should have proper attributes", func() {
+				Expect(document.Id()).To(Equal(id))
+				Expect(document.Name()).To(Equal(name))
+			})
+
+			It("should NOT be saved", func() {
+				Expect(document.IsSaved()).To(Equal(false))
+			})
+		})
+
+		Context("when name is empty", func() {
+			BeforeEach(func() {
+				name = ""
+			})
+
+			It("should return a proper document", func() {
+				Expect(document).ToNot(BeNil())
+				Expect(err).To(BeNil())
+			})
+
+			It("should have proper attributes", func() {
+				Expect(document.Id()).To(Equal(id))
+				Expect(document.Name()).To(Equal(domain.DefaultFileName))
+			})
+
+			It("should be saved", func() {
+				Expect(document.IsSaved()).To(Equal(true))
 			})
 		})
 
@@ -39,8 +70,57 @@ var _ = Describe("Document", func() {
 			It("should return a proper document", func() {
 				Expect(document).ToNot(BeNil())
 				Expect(err).To(BeNil())
+			})
 
+			It("should have proper attributes", func() {
 				Expect(document.Id()).To(Equal(id))
+				Expect(document.Name()).To(Equal(name))
+			})
+
+			It("should be saved", func() {
+				Expect(document.IsSaved()).To(Equal(true))
+			})
+		})
+	})
+
+	Describe("Creating an unsaved document", func() {
+		JustBeforeEach(func() {
+			document, err = domain.NewUnsavedDocument(name)
+		})
+
+		Context("when name is empty", func() {
+			BeforeEach(func() {
+				name = ""
+			})
+
+			It("should return a proper document", func() {
+				Expect(document).ToNot(BeNil())
+				Expect(err).To(BeNil())
+			})
+
+			It("should have proper attributes", func() {
+				Expect(document.Id()).To(Equal(""))
+				Expect(document.Name()).To(Equal(domain.DefaultFileName))
+			})
+
+			It("should NOT be saved", func() {
+				Expect(document.IsSaved()).To(Equal(false))
+			})
+		})
+
+		Context("when all parameters are defined", func() {
+			It("should return a proper document", func() {
+				Expect(document).ToNot(BeNil())
+				Expect(err).To(BeNil())
+			})
+
+			It("should have proper attributes", func() {
+				Expect(document.Id()).To(Equal(""))
+				Expect(document.Name()).To(Equal(name))
+			})
+
+			It("should NOT be saved", func() {
+				Expect(document.IsSaved()).To(Equal(false))
 			})
 		})
 	})

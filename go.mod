@@ -6,7 +6,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/onsi/ginkgo/v2 v2.6.0
 	github.com/onsi/gomega v1.24.1
-	github.com/theobitoproject/myoboku v1.21.2
+	github.com/theobitoproject/myoboku v1.22.0
 )
 
 require (

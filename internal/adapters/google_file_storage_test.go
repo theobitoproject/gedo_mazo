@@ -27,6 +27,7 @@ var _ = Describe("GoogleFileStorage", func() {
 
 		baseDocument *domain.Document
 		outputFolder *domain.Folder
+		docToCreate  *domain.Document
 		data         *domain.MergingData
 
 		clonedDocument *domain.Document
@@ -39,10 +40,13 @@ var _ = Describe("GoogleFileStorage", func() {
 		mockDriveClient = mocks.NewMockDriveClient(mockCtrl)
 		mockDocumentsClient = mocks.NewMockDocumentsClient(mockCtrl)
 
-		baseDocument, err = domain.NewDocument("some doc id")
+		baseDocument, err = domain.NewDocument("some doc id", "some base name")
 		Expect(err).To(BeNil())
 
 		outputFolder, err = domain.NewFolder("some folder if")
+		Expect(err).To(BeNil())
+
+		docToCreate, err = domain.NewUnsavedDocument("doc to create")
 		Expect(err).To(BeNil())
 
 		data, err = domain.NewMergingData()
@@ -102,6 +106,7 @@ var _ = Describe("GoogleFileStorage", func() {
 				ctx,
 				baseDocument,
 				outputFolder,
+				docToCreate,
 			)
 		})
 
@@ -115,12 +120,12 @@ var _ = Describe("GoogleFileStorage", func() {
 			req = &messages.CopyFileRequest{
 				BaseFileId:    baseDocument.Id(),
 				OuputFolderId: outputFolder.Id(),
-				// TODO: set proper title
-				Title: "obito_test",
+				FileTitle:     docToCreate.Name(),
 			}
 
 			res = &messages.CopyFileResponse{
-				CopiedFileId: "some cloned id",
+				FileId:    "some cloned id",
+				FileTitle: docToCreate.Name(),
 			}
 		})
 
@@ -152,7 +157,8 @@ var _ = Describe("GoogleFileStorage", func() {
 				Expect(clonedDocument).ToNot(BeNil())
 				Expect(err).To(BeNil())
 
-				Expect(clonedDocument.Id()).To(Equal(res.CopiedFileId))
+				Expect(clonedDocument.Id()).To(Equal(res.FileId))
+				Expect(clonedDocument.Name()).To(Equal(res.FileTitle))
 			})
 		})
 	})
@@ -177,7 +183,10 @@ var _ = Describe("GoogleFileStorage", func() {
 			)
 			Expect(err).To(BeNil())
 
-			clonedDocument, err = domain.NewDocument("some cloned id")
+			clonedDocument, err = domain.NewDocument(
+				"some cloned id",
+				"some cloned name",
+			)
 			Expect(err).To(BeNil())
 
 			data.SetKey("some key", "some value")

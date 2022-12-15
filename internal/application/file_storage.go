@@ -13,6 +13,7 @@ type FileStorage interface {
 		context.Context,
 		*domain.Document,
 		*domain.Folder,
+		*domain.Document,
 	) (*domain.Document, error)
 	// MergeDataIntoDocument merges the passed data into the document
 	MergeDataIntoDocument(

@@ -35,16 +35,22 @@ func (app *Application) GenerateDocumentFromTemplate(
 	ctx context.Context,
 	templateDoc *domain.Document,
 	outputFolder *domain.Folder,
+	docToCreate *domain.Document,
 	data *domain.MergingData,
 ) error {
-	clonedDocument, err := app.fileStorage.CloneDocument(
+	if docToCreate.IsSaved() {
+		return fmt.Errorf("cloned doc cannot be already saved")
+	}
+
+	clonedDoc, err := app.fileStorage.CloneDocument(
 		ctx,
 		templateDoc,
 		outputFolder,
+		docToCreate,
 	)
 	if err != nil {
 		return err
 	}
 
-	return app.fileStorage.MergeDataIntoDocument(ctx, clonedDocument, data)
+	return app.fileStorage.MergeDataIntoDocument(ctx, clonedDoc, data)
 }

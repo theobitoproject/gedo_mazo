@@ -40,15 +40,16 @@ func (fs *GoogleFileStorage) CloneDocument(
 	ctx context.Context,
 	baseDocument *domain.Document,
 	outputFolder *domain.Folder,
+	docToCreate *domain.Document,
 ) (*domain.Document, error) {
-	req := getCopyFileRequest(baseDocument, outputFolder)
+	req := getCopyFileRequest(baseDocument, outputFolder, docToCreate)
 
 	res, err := fs.driveClient.CopyFile(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
-	return domain.NewDocument(res.CopiedFileId)
+	return domain.NewDocument(res.FileId, res.FileTitle)
 }
 
 // MergeDataIntoDocument merges the passed data into the document
@@ -67,12 +68,12 @@ func (fs *GoogleFileStorage) MergeDataIntoDocument(
 func getCopyFileRequest(
 	baseDocument *domain.Document,
 	outputFolder *domain.Folder,
+	docToCreate *domain.Document,
 ) *messages.CopyFileRequest {
 	return &messages.CopyFileRequest{
 		BaseFileId:    baseDocument.Id(),
 		OuputFolderId: outputFolder.Id(),
-		// TODO: set proper title
-		Title: "obito_test",
+		FileTitle:     docToCreate.Name(),
 	}
 }
 
