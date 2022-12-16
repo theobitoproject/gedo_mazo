@@ -9,3 +9,7 @@ test_all_vv:
 .PHONY: gen_mocks
 gen_mocks:
 	sh scripts/gen_mocks.sh
+
+.PHONY: gen_gedo_mazo_grpc_stubs
+gen_gedo_mazo_grpc_stubs:
+	sh scripts/gen_proto.sh gedo_mazo $(version) internal/ports/gedo_mazo
