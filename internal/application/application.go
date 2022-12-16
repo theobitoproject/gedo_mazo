@@ -38,8 +38,11 @@ func (app *Application) GenerateDocumentFromTemplate(
 	docToCreate *domain.Document,
 	data *domain.MergingData,
 ) error {
+	if !templateDoc.IsSaved() {
+		return fmt.Errorf("template doc must be already saved")
+	}
 	if docToCreate.IsSaved() {
-		return fmt.Errorf("cloned doc cannot be already saved")
+		return fmt.Errorf("doc to create cannot be already saved")
 	}
 
 	clonedDoc, err := app.fileStorage.CloneDocument(

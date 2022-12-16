@@ -94,6 +94,20 @@ var _ = Describe("Application", func() {
 			Expect(err).To(BeNil())
 		})
 
+		Context("when template docs is NOT saved", func() {
+			BeforeEach(func() {
+				templateDoc, err = domain.NewDocument(
+					"",
+					"template doc",
+				)
+				Expect(err).To(BeNil())
+			})
+
+			It("should return an error", func() {
+				Expect(err).ToNot(BeNil())
+			})
+		})
+
 		Context("when doc to create is already saved", func() {
 			BeforeEach(func() {
 				docToCreate, err = domain.NewDocument(
