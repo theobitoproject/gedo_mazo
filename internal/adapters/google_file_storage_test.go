@@ -8,10 +8,11 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"github.com/theobitoproject/gedo_mazo/internal/adapters"
-	"github.com/theobitoproject/gedo_mazo/internal/domain"
 	"github.com/theobitoproject/myoboku/google/messages"
 	"github.com/theobitoproject/myoboku/google/mocks"
+
+	"github.com/theobitoproject/gedo_mazo/internal/adapters"
+	"github.com/theobitoproject/gedo_mazo/internal/domain"
 )
 
 var _ = Describe("GoogleFileStorage", func() {

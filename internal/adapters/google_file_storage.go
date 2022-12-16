@@ -4,10 +4,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theobitoproject/gedo_mazo/internal/domain"
-	"github.com/theobitoproject/gedo_mazo/tools"
 	"github.com/theobitoproject/myoboku/google"
 	"github.com/theobitoproject/myoboku/google/messages"
+
+	"github.com/theobitoproject/gedo_mazo/internal/domain"
+	"github.com/theobitoproject/gedo_mazo/tools"
 )
 
 // GoogleFileStorage defines a handler to access and manage files
